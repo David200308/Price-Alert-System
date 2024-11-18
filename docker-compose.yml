@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  backend:
+    build: 
+      context: ./Backend
+      dockerfile: Dockerfile
+    ports:
+      - "3010:3010"
+    depends_on:
+      - redis
+      - rabbitmq
+    env_file:
+      - ./Backend/.env
+
+  rabbitmq:
+    image: "rabbitmq:4.0-management"
+    restart: always
+    ports:
+      - "15672:15672"
+      - "5672:5672" 
+
+  redis:
+    image: "redis:latest"
+    restart: always
+    ports:
+      - "16379:6379"
+    volumes:
+      - redis:/data
+
+volumes: 
+  redis:
+    driver: local
