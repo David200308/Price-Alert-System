@@ -17,4 +17,5 @@ type UserNotification struct {
 	UserEmail string `json:"user_email"`
 	UserUUID  string `json:"user_uuid"`
 	Status    string `json:"status"`
+	Timestamp int64  `json:"timestamp"`
 }

@@ -1,9 +1,10 @@
 package initializers
 
 import (
+	"fmt"
 	"os"
 
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
 type MQ struct {
@@ -13,58 +14,38 @@ type MQ struct {
 
 var MQInstance *MQ
 
-func InitMQ() (*MQ, error) {
-	conn, err := amqp.Dial(os.Getenv("RABBITMQ_URL"))
+func MQPublish(queueName string, message amqp.Publishing) error {
+	rabbitMQURL := os.Getenv("RABBITMQ_URL")
+	conn, err := amqp.Dial(rabbitMQURL)
 	if err != nil {
-		return nil, err
+		panic(err)
+	}
+	defer conn.Close()
+
+	channel, err := conn.Channel()
+	if err != nil {
+		panic(err)
+	}
+	defer channel.Close()
+
+	_, err = channel.QueueDeclare(queueName, true, false, false, false, nil)
+	if err != nil {
+		panic(err)
 	}
 
-	ch, err := conn.Channel()
-	if err != nil {
-		return nil, err
+	if err := channel.Publish("", queueName, false, false, message); err != nil {
+		return fmt.Errorf("failed to publish user notification: %w", err)
 	}
 
-	return &MQ{
-		Connection: conn,
-		Channel:    ch,
-	}, nil
+	return nil
 }
 
 func (mq *MQ) Close() {
-	mq.Channel.Close()
-	mq.Connection.Close()
-}
-
-func (mq *MQ) Publish(exchange, key string, body []byte) error {
-	return mq.Channel.Publish(
-		exchange,
-		key,
-		false,
-		false,
-		amqp.Publishing{
-			ContentType: "application/json",
-			Body:        body,
-		},
-	)
-}
-
-func (mq *MQ) Consume(queue, exchange, key string) (<-chan amqp.Delivery, error) {
-	if err := mq.Channel.ExchangeDeclare(exchange, "direct", true, false, false, false, nil); err != nil {
-		return nil, err
+	if mq.Channel != nil {
+		mq.Channel.Close()
 	}
-
-	if _, err := mq.Channel.QueueDeclare(queue, true, false, false, false, nil); err != nil {
-		return nil, err
+	if mq.Connection != nil {
+		mq.Connection.Close()
 	}
-
-	if err := mq.Channel.QueueBind(queue, key, exchange, false, nil); err != nil {
-		return nil, err
-	}
-
-	msgs, err := mq.Channel.Consume(queue, "", true, false, false, false, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return msgs, nil
+	fmt.Println("RabbitMQ connection and channel closed")
 }

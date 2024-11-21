@@ -1,37 +1,52 @@
 package mq
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
+	"log"
+	"time"
 
 	"github.com/David200308/go-api/Backend/initializers"
 	"github.com/David200308/go-api/Backend/models"
+	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-func UserCreated(ctx context.Context, userUUID string, email string) error {
+const userCreatedQueueName = "notification:user:created"
+const userVerifiedQueueName = "notification:user:verified"
+
+func UserCreated(userUUID string, email string) error {
 	notification := models.UserNotification{
 		UserEmail: email,
 		UserUUID:  userUUID,
 		Status:    "created",
+		Timestamp: time.Now().Unix(),
 	}
 
 	body, err := json.Marshal(notification)
 	if err != nil {
-		return fmt.Errorf("failed to marshal payment success message: %w", err)
+		return fmt.Errorf("failed to marshal user notification: %w", err)
 	}
 
-	if err := initializers.MQInstance.Publish("users.event.created", "User.Created", body); err != nil {
-		return fmt.Errorf("failed to publish payment success message: %w", err)
+	message := amqp.Publishing{
+		ContentType: "application/json",
+		Body:        []byte(body),
 	}
+
+	err = initializers.MQPublish(userCreatedQueueName, message)
+	if err != nil {
+		return fmt.Errorf("failed to initialize MQ instance: %w", err)
+	}
+	log.Println("User created event published")
+
 	return nil
 }
 
-func UserVerify(ctx context.Context, userUUID string, email string) error {
+func UserVerify(userUUID string, email string) error {
 	notification := models.UserNotification{
 		UserEmail: email,
 		UserUUID:  userUUID,
-		Status:    "verify",
+		Status:    "verified",
+		Timestamp: time.Now().Unix(),
 	}
 
 	body, err := json.Marshal(notification)
@@ -39,8 +54,17 @@ func UserVerify(ctx context.Context, userUUID string, email string) error {
 		return fmt.Errorf("failed to marshal payment success message: %w", err)
 	}
 
-	if err := initializers.MQInstance.Publish("users.event.verify", "User.Verify", body); err != nil {
-		return fmt.Errorf("failed to publish payment success message: %w", err)
+	message := amqp.Publishing{
+		ContentType: "application/json",
+		Body:        []byte(body),
 	}
+
+	err = initializers.MQPublish(userVerifiedQueueName, message)
+	if err != nil {
+		return fmt.Errorf("failed to initialize MQ instance: %w", err)
+	}
+
+	log.Println("User verified event published")
+
 	return nil
 }

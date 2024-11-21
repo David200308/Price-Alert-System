@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"os"
 	"strings"
 
@@ -48,6 +49,11 @@ func CreateUser(c *gin.Context) {
 			"message": "Failed to create user",
 		})
 		return
+	}
+
+	err = mq.UserCreated(userUuid, strings.ToLower(user.Email))
+	if err != nil {
+		log.Println("Error publishing user created event:", err)
 	}
 
 	emailVerifyToken, err := tools.GenerateToken(strings.ToLower(user.Email), userUuid, "email_verification", true)
@@ -280,7 +286,7 @@ func EmailVerification(c *gin.Context) {
 		return
 	}
 
-	mq.UserVerify(c, uuid, email)
+	mq.UserVerify(uuid, email)
 
 	c.JSON(200, gin.H{
 		"status":  "success",
@@ -312,8 +318,6 @@ func GetUser(c *gin.Context) {
 		})
 		return
 	}
-
-	mq.UserCreated(c, userData.UserUUID, userData.Email)
 
 	userData.Password = ""
 

@@ -20,4 +20,5 @@ type PaymentNotification struct {
 	PaymentUUID string `json:"payment_uuid"`
 	UserUUID    string `json:"user_uuid"`
 	Status      string `json:"status"`
+	Timestamp   int64  `json:"timestamp"`
 }

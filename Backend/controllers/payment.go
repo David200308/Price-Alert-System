@@ -62,7 +62,7 @@ func InitPayment(c *gin.Context) {
 		return
 	}
 
-	mq.PaymentCreated(c, userUUID, payment.PaymentUUID)
+	mq.PaymentCreated(userUUID, payment.PaymentUUID)
 
 	c.JSON(200, gin.H{
 		"status":       "success",
@@ -241,7 +241,7 @@ func StripePaymentCallback(c *gin.Context) {
 			return
 		}
 
-		mq.PaymentCancelled(c, userUUID, paymentUUID)
+		mq.PaymentCancelled(userUUID, paymentUUID)
 
 		c.JSON(200, gin.H{
 			"status":  "success",
@@ -257,7 +257,7 @@ func StripePaymentCallback(c *gin.Context) {
 		return
 	}
 
-	mq.PaymentSuccessful(c, userUUID, paymentUUID)
+	mq.PaymentSuccessful(userUUID, paymentUUID)
 
 	c.JSON(200, gin.H{
 		"status":  "success",
