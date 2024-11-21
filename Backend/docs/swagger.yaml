@@ -10,6 +10,12 @@ paths:
   /notification/payment/successful:
     post:
       responses: {}
+  /notification/user/created:
+    post:
+      responses: {}
+  /notification/user/verified:
+    post:
+      responses: {}
   /payment:
     get:
       parameters:

@@ -10,5 +10,11 @@ func SetupRouter() *gin.Engine {
 	userGroup := r.Group("/user")
 	UserRoutes(userGroup)
 
+	PaymentGroup := r.Group("/payment")
+	PaymentRoutes(PaymentGroup)
+
+	notificationGroup := r.Group("/notification")
+	NotificationRoutes(notificationGroup)
+
 	return r
 }
