@@ -11,7 +11,7 @@ import (
 
 func CreatePayment(paymentData *models.Payment) (string, error) {
 	if err := initializers.DB.Create(&paymentData).Error; err != nil {
-		log.Println("Error inserting user into database:", err)
+		log.Println("Error inserting payment into database:", err)
 		return "", err
 	}
 

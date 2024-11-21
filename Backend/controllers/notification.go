@@ -36,9 +36,14 @@ func GetUserCreatedNotification(c *gin.Context) {
 		return
 	}
 
+	var resJson []interface{}
+	for _, v := range res {
+		resJson = append(resJson, tools.StringToJSON(v))
+	}
+
 	c.JSON(200, gin.H{
 		"status": "success",
-		"result": res,
+		"result": resJson,
 	})
 }
 
@@ -64,9 +69,14 @@ func GetUserVerifiedNotification(c *gin.Context) {
 		return
 	}
 
+	var resJson []interface{}
+	for _, v := range res {
+		resJson = append(resJson, tools.StringToJSON(v))
+	}
+
 	c.JSON(200, gin.H{
 		"status": "success",
-		"result": res,
+		"result": resJson,
 	})
 }
 
@@ -92,9 +102,14 @@ func GetPaymentCreatedNotification(c *gin.Context) {
 		return
 	}
 
+	var resJson []interface{}
+	for _, v := range res {
+		resJson = append(resJson, tools.StringToJSON(v))
+	}
+
 	c.JSON(200, gin.H{
 		"status": "success",
-		"result": res,
+		"result": resJson,
 	})
 }
 
@@ -120,9 +135,14 @@ func GetPaymentSuccessfulNotification(c *gin.Context) {
 		return
 	}
 
+	var resJson []interface{}
+	for _, v := range res {
+		resJson = append(resJson, tools.StringToJSON(v))
+	}
+
 	c.JSON(200, gin.H{
 		"status": "success",
-		"result": res,
+		"result": resJson,
 	})
 }
 
@@ -148,8 +168,13 @@ func GetPaymentCancelledNotification(c *gin.Context) {
 		return
 	}
 
+	var resJson []interface{}
+	for _, v := range res {
+		resJson = append(resJson, tools.StringToJSON(v))
+	}
+
 	c.JSON(200, gin.H{
 		"status": "success",
-		"result": res,
+		"result": resJson,
 	})
 }
