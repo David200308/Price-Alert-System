@@ -2,27 +2,32 @@
 
 ## 1 Tech Stack
 
-- Programming Language: GoLang
+- Programming Language: Go Language
 - Web Framework: Gin
 - Database: PostgreSQL
 - Cache Database: Redis
 - Message Queue: RabbitMQ
 - Container: Docker
-- Email Service: Mailgun (https://www.mailgun.com/)
 - Document: Swagger
-- Error Tracking: Sentry (https://sentry.io/)
+- Email Service: Mailgun (https://www.mailgun.com)
+- Payment Service: Stripe (https://stripe.com)
+- Error Tracking: Sentry (https://sentry.io)
 
 ## 2 Program Build & Usage
 
 ```bash
-## Running Backend
+## Init database (Make sure the postgreSQL is prepared)
 cd Backend
-go build
-./Backend
+go run ./migrate/migrate.go
 
 ## Generate Swagget Docs
 go install github.com/swaggo/swag/cmd/swag@latest
 $HOME/go/bin/swag init
+
+## Running Backend
+cd Backend
+go build
+./Backend
 ```
 
 ## 3 ES256 JWT Signing Key Pair Generate
