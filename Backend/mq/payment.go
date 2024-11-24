@@ -11,10 +11,6 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-const PaymentCreatedQueueName = "notification:payment:created"
-const PaymentSuccessQueueName = "notification:payment:success"
-const PaymentCancelledQueueName = "notification:payment:cancelled"
-
 func PaymentCreated(userUUID string, paymentUUID string) error {
 	notification := models.PaymentNotification{
 		PaymentUUID: paymentUUID,

@@ -9,8 +9,10 @@
 - Message Queue: RabbitMQ
 - Container: Docker
 - Document: Swagger
+- Scheduler: Linux Cron
 - Email Service: Mailgun (https://www.mailgun.com)
 - Payment Service: Stripe (https://stripe.com)
+- Stock Market Data Service: Alpha Vantage (https://www.alphavantage.co)
 - Error Tracking: Sentry (https://sentry.io)
 
 ## 2 Program Build & Usage

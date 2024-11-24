@@ -11,9 +11,6 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-const userCreatedQueueName = "notification:user:created"
-const userVerifiedQueueName = "notification:user:verified"
-
 func UserCreated(userUUID string, email string) error {
 	notification := models.UserNotification{
 		UserEmail: email,
@@ -32,7 +29,7 @@ func UserCreated(userUUID string, email string) error {
 		Body:        []byte(body),
 	}
 
-	err = initializers.MQPublish(userCreatedQueueName, message)
+	err = initializers.MQPublish(UserCreatedQueueName, message)
 	if err != nil {
 		return fmt.Errorf("failed to initialize MQ instance: %w", err)
 	}
@@ -59,7 +56,7 @@ func UserVerify(userUUID string, email string) error {
 		Body:        []byte(body),
 	}
 
-	err = initializers.MQPublish(userVerifiedQueueName, message)
+	err = initializers.MQPublish(UserVerifiedQueueName, message)
 	if err != nil {
 		return fmt.Errorf("failed to initialize MQ instance: %w", err)
 	}

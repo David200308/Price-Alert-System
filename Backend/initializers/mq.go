@@ -10,13 +10,6 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
-type MQ struct {
-	Connection *amqp.Connection
-	Channel    *amqp.Channel
-}
-
-var MQInstance *MQ
-
 func MQPublish(queueName string, message amqp.Publishing) error {
 	rabbitMQURL := os.Getenv("RABBITMQ_URL")
 	if rabbitMQURL == "" {
@@ -90,14 +83,4 @@ func MQConsume(queueName string, timeout time.Duration) ([]string, error) {
 			return res, nil
 		}
 	}
-}
-
-func (mq *MQ) Close() {
-	if mq.Channel != nil {
-		mq.Channel.Close()
-	}
-	if mq.Connection != nil {
-		mq.Connection.Close()
-	}
-	fmt.Println("RabbitMQ connection and channel closed")
 }

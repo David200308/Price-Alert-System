@@ -4,15 +4,10 @@ import (
 	"time"
 
 	"github.com/David200308/go-api/Backend/initializers"
+	"github.com/David200308/go-api/Backend/mq"
 	"github.com/David200308/go-api/Backend/tools"
 	"github.com/gin-gonic/gin"
 )
-
-const userCreatedQueueName = "notification:user:created"
-const userVerifiedQueueName = "notification:user:verified"
-const paymentCreatedQueueName = "notification:payment:created"
-const paymentSuccessQueueName = "notification:payment:success"
-const paymentCancelledQueueName = "notification:payment:cancelled"
 
 // @Router /notification/user/created [Post]
 func GetUserCreatedNotification(c *gin.Context) {
@@ -26,7 +21,7 @@ func GetUserCreatedNotification(c *gin.Context) {
 		return
 	}
 
-	res, err := initializers.MQConsume(userCreatedQueueName, 5*time.Second)
+	res, err := initializers.MQConsume(mq.UserCreatedQueueName, 5*time.Second)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"status":  "error",
@@ -59,7 +54,7 @@ func GetUserVerifiedNotification(c *gin.Context) {
 		return
 	}
 
-	res, err := initializers.MQConsume(userVerifiedQueueName, 5*time.Second)
+	res, err := initializers.MQConsume(mq.UserVerifiedQueueName, 5*time.Second)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"status":  "error",
@@ -92,7 +87,7 @@ func GetPaymentCreatedNotification(c *gin.Context) {
 		return
 	}
 
-	res, err := initializers.MQConsume(paymentCreatedQueueName, 5*time.Second)
+	res, err := initializers.MQConsume(mq.PaymentCreatedQueueName, 5*time.Second)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"status":  "error",
@@ -125,7 +120,7 @@ func GetPaymentSuccessfulNotification(c *gin.Context) {
 		return
 	}
 
-	res, err := initializers.MQConsume(paymentSuccessQueueName, 5*time.Second)
+	res, err := initializers.MQConsume(mq.PaymentSuccessQueueName, 5*time.Second)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"status":  "error",
@@ -158,7 +153,7 @@ func GetPaymentCancelledNotification(c *gin.Context) {
 		return
 	}
 
-	res, err := initializers.MQConsume(paymentCancelledQueueName, 5*time.Second)
+	res, err := initializers.MQConsume(mq.PaymentCancelledQueueName, 5*time.Second)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"status":  "error",
