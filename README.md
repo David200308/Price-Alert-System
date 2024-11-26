@@ -29,8 +29,15 @@ $HOME/go/bin/swag init
 
 ## Running Backend
 cd Backend
-go build
+go build .
 ./Backend
+
+## Running Scheduler
+cd Scheduler
+go build .
+go build ./daily_status_update/daily_update.go
+
+./scheduler.sh
 ```
 
 ## 3 ES256 JWT Signing Key Pair Generate
