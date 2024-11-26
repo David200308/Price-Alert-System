@@ -1,4 +1,4 @@
-# Go API Backend
+# Price Alert System
 
 ## 1 Tech Stack
 
