@@ -20,7 +20,14 @@ jobs:
       with:
         go-version: '1.23'
 
-    - name: Build
+    - name: Build APP:Backend
       working-directory: Backend
       run: go build -v ./...
-      
+
+    - name: Build APP:Scheduler
+      working-directory: Scheduler
+      run: go build -v ./...
+
+    - name: Build APP:Scheduler:daily_update
+      working-directory: Scheduler/daily_status_update
+      run: go build -v daily_update.go
