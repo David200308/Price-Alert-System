@@ -15,4 +15,5 @@ func main() {
 	initializers.DB.AutoMigrate(&models.Payment{})
 	initializers.DB.AutoMigrate(&models.Order{})
 	initializers.DB.AutoMigrate(&models.Alert{})
+	initializers.DB.AutoMigrate(&models.Subscribed{})
 }

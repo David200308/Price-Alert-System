@@ -10,12 +10,24 @@ func main() {
 	initializers.LoadEnvVariables()
 	initializers.ConnectDatabase()
 
-	stocks, err := subscriptions.GetSubscribedStocks()
-	if err != nil {
-		return
-	}
+	subscribedStockChannel := make(chan []string)
+	subscribedCryptoChannel := make(chan []string)
 
-	for _, stock := range stocks {
-		go alerts.SendStockAlertNotification(stock)
-	}
+	go subscriptions.GetSubscribedSymbols("stock", subscribedStockChannel)
+	go subscriptions.GetSubscribedSymbols("crypto", subscribedCryptoChannel)
+
+	subscribedStock, subscribedCrypto := <-subscribedStockChannel, <-subscribedCryptoChannel
+
+	go func() {
+		for _, symbol := range subscribedStock {
+			go alerts.SendPriceAlertNotification("stock", symbol)
+		}
+	}()
+
+	go func() {
+		for _, symbol := range subscribedCrypto {
+			go alerts.SendPriceAlertNotification("crypto", symbol)
+		}
+	}()
+
 }

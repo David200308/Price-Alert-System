@@ -13,6 +13,7 @@
 - Email Service: Mailgun (https://www.mailgun.com)
 - Payment Service: Stripe (https://stripe.com)
 - Stock Market Data Service: Alpha Vantage (https://www.alphavantage.co)
+- Crypto Market Data Service: API-Ninjas (https://api-ninjas.com)
 - Error Tracking: Sentry (https://sentry.io)
 
 ## 2 Program Build & Usage
